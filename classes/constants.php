@@ -30,4 +30,18 @@ class constants {
 
     const M_COMPONENT = 'tiny_snippet';
 
+    /**
+     * Hardcoded mapping of group number → display name for the snippet selector.
+     * The group number is the first segment of a snippet's snippetversion_X value
+     * (e.g. "2.5.0" → group 2). Edit this array to add or rename groups.
+     */
+    const GROUP_NAMES = [
+        1 => 'Headings',
+        2 => 'Layout',
+        3 => 'Formatting',
+    ];
+
+    /** Label used when a snippet's group number is not present in GROUP_NAMES. */
+    const UNGROUPED_NAME = 'Other';
+
 }

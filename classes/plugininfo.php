@@ -72,10 +72,12 @@ class plugininfo extends plugin implements plugin_with_configuration, plugin_wit
         // If the poodle filter plugin is installed and enabled, add widgets to the toolbar.
         $snippetconfig = get_config('tiny_snippet');
         if ($snippetconfig->version) {
-            $widgets = self::get_params_for_js();
-            $params['widgets'] = $widgets;
+            $bundled = self::get_params_for_js();
+            $params['widgets'] = $bundled['widgets'];
+            $params['groups'] = $bundled['groups'];
         }else{
             $params['widgets'] = [];
+            $params['groups'] = [];
         }
 
         return ['snippet'=>$params];
@@ -126,6 +128,11 @@ class plugininfo extends plugin implements plugin_with_configuration, plugin_wit
             $widget->instructions = $snippets['snippetinstructions_' . $snippetindex];
             $widget->defaults  = $snippets['defaults_' . $snippetindex];
 
+            // Parse snippetversion_X as GROUP.SORT.ignored for grouping and ordering.
+            $widget->version = isset($snippets['snippetversion_' . $snippetindex])
+                ? $snippets['snippetversion_' . $snippetindex] : '';
+            [$widget->groupnum, $widget->sortnum] = self::parse_group_sort($widget->version);
+
             $allvariables = self::fetch_widget_variables($widget->body);
             $alldefaults=self::fetch_widget_properties($widget->defaults);
             $uniquevariables = array_unique($allvariables);
@@ -158,7 +165,39 @@ class plugininfo extends plugin implements plugin_with_configuration, plugin_wit
 
         }
 
-        return $widgets;
+        // Sort by group, then sort-position within group, then insertion order as tie-break.
+        usort($widgets, function($a, $b) {
+            return [$a->groupnum, $a->sortnum, $a->templateindex]
+                <=> [$b->groupnum, $b->sortnum, $b->templateindex];
+        });
+
+        // Build grouped view for the selector template. Flat list is kept for the
+        // existing AMD lookup (widget_selector.js::getWidget walks config.widgets by templateindex).
+        $groups = [];
+        foreach ($widgets as $widget) {
+            $g = $widget->groupnum;
+            if (!isset($groups[$g])) {
+                $groups[$g] = (object)[
+                    'groupnum' => $g,
+                    'groupname' => constants::GROUP_NAMES[$g] ?? constants::UNGROUPED_NAME,
+                    'widgets' => [],
+                ];
+            }
+            $groups[$g]->widgets[] = $widget;
+        }
+
+        return ['widgets' => $widgets, 'groups' => array_values($groups)];
+    }
+
+    /**
+     * Parse a snippetversion_X value of the form "GROUP.SORT.ignored" into [groupnum, sortnum].
+     * Missing / non-numeric segments fall back to group 0 (ungrouped) and sort 999 (end).
+     */
+    private static function parse_group_sort(string $version): array {
+        $parts = explode('.', trim($version));
+        $groupnum = (isset($parts[0]) && is_numeric($parts[0])) ? (int)$parts[0] : 0;
+        $sortnum  = (isset($parts[1]) && is_numeric($parts[1])) ? (int)$parts[1] : 999;
+        return [$groupnum, $sortnum];
     }
 
     /**

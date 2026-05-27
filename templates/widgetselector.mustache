@@ -5,11 +5,16 @@
     <form class="tiny_snippet_form" id="{{uniqid}}_tiny_snippet_form">
         <div class="root tab-content">
           <div>{{#str}} widgetsselector_instructions, tiny_snippet {{/str}}</div>
-            {{#widgets}}
-            <div id="{{uniqid}}" class="tiny_snippet_widget_buttons mdl-align" style="width:30%;">
-            <button style="width: 100%;" data-templateindex="{{templateindex}}" class="tiny_snippet_widgetchoosebutton btn btn-info d-block">{{name}}</button>
+            {{#groups}}
+            <div class="tiny_snippet_widget_group">
+                <h5 class="tiny_snippet_widget_group_title">{{groupname}}</h5>
+                {{#widgets}}
+                <div class="tiny_snippet_widget_buttons">
+                    <button data-templateindex="{{templateindex}}" class="tiny_snippet_widgetchoosebutton btn btn-info">{{name}}</button>
+                </div>
+                {{/widgets}}
             </div>
-            {{/widgets}}
+            {{/groups}}
         </div>
     </form>
 </div>

@@ -263,6 +263,7 @@ export default class {
 
         //insert method
         context.widgets = config.widgets;
+        context.groups = config.groups;
 
         return context;
     }

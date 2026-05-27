@@ -41,8 +41,25 @@ div.tiny_snippet_dragging {
 }
 
 div.tiny_snippet_widget_buttons {
-    display: inline-block;
-    margin: 5px;
+    display: block;
+    margin: 4px 0;
+}
+
+div.tiny_snippet_widget_buttons .tiny_snippet_widgetchoosebutton {
+    width: 100%;
+    text-align: left;
+}
+
+.tiny_snippet_widget_group {
+    margin-bottom: 1.25rem;
+}
+
+.tiny_snippet_widget_group_title {
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 4px;
+    margin: 12px 0 8px;
+    font-weight: 600;
 }
 
 .tiny_snippet_hidden{

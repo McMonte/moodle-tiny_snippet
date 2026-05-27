@@ -110,7 +110,9 @@ public static function fetch_snippet_pages($conf){
 			$settings_page->add(new \admin_setting_configtextarea('tiny_snippet/defaults_' . $sindex,
 				get_string('defaults', 'tiny_snippet'), '', '', PARAM_RAW));
 			$settings_page->add(new \admin_setting_configtext('tiny_snippet/snippetversion_' . $sindex,
-				get_string('snippetversion', 'tiny_snippet') . ' ' . $sindex , '', '1.0.0', PARAM_TEXT));
+				get_string('snippetgroupsort', 'tiny_snippet'),
+				get_string('snippetgroupsort_desc', 'tiny_snippet'),
+				'1.0.0', PARAM_TEXT));
               
 			$pages[] = $settings_page;
 		}
