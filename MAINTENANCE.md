@@ -36,12 +36,12 @@ cd /var/www/moodle
 npx grunt amd --root=public/lib/editor/tiny/plugins/snippet
 
 # 4. Purge Moodle caches so mustache + AMD + lang changes take effect
-php public/admin/cli/purge_caches.php
+php /var/www/moodle/admin/cli/purge_caches.php
 
 # 5. Test in a browser (see Verification below)
 
 # 6. Push the rebased branch to the fork
-cd public/lib/editor/tiny/plugins/snippet
+cd /var/www/moodle/public/lib/editor/tiny/plugins/snippet
 git push --force-with-lease origin master
 ```
 
