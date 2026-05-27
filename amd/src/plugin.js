@@ -30,30 +30,32 @@ import {getSetup as getCommandSetup} from './commands';
 import * as Configuration from './configuration';
 
 // Setup the tiny_snippet Plugin.
-export default new Promise(async(resolve) => {
+export default new Promise((resolve) => {
     // Note: The PluginManager.add function does not support asynchronous configuration.
     // Perform any asynchronous configuration here, and then call the PluginManager.add function.
-    const [
-        tinyMCE,
-        pluginMetadata,
-        setupCommands,
-    ] = await Promise.all([
-        getTinyMCE(),
-        getPluginMetadata(component, pluginName),
-        getCommandSetup(),
-    ]);
+    (async () => {
+        const [
+            tinyMCE,
+            pluginMetadata,
+            setupCommands,
+        ] = await Promise.all([
+            getTinyMCE(),
+            getPluginMetadata(component, pluginName),
+            getCommandSetup(),
+        ]);
 
-    // Reminder: Any asynchronous code must be run before this point.
-    tinyMCE.PluginManager.add(pluginName, (editor) => {
-        // Register any options that your plugin has
-        registerOptions(editor);
+        // Reminder: Any asynchronous code must be run before this point.
+        tinyMCE.PluginManager.add(pluginName, (editor) => {
+            // Register any options that your plugin has
+            registerOptions(editor);
 
-        // Setup any commands such as buttons, menu items, and so on.
-        setupCommands(editor);
+            // Setup any commands such as buttons, menu items, and so on.
+            setupCommands(editor);
 
-        // Return the pluginMetadata object. This is used by TinyMCE to display a help link for your plugin.
-        return pluginMetadata;
-    });
+            // Return the pluginMetadata object. This is used by TinyMCE to display a help link for your plugin.
+            return pluginMetadata;
+        });
 
-    resolve([pluginName, Configuration]);
+        resolve([pluginName, Configuration]);
+    })();
 });

@@ -25,7 +25,6 @@ import Log from 'core/log';
 import {getConfig} from './options';
 
 import * as Templates from 'core/templates';
-import {prefetchStrings, prefetchTemplates} from 'core/prefetch';
 import Modal from "./modal";
 
 
@@ -162,7 +161,7 @@ export default class {
         Log.debug('showing the template form for: ' + widget.name);
 
         that.modalRoot.querySelector('#tiny_snippet_widgets_optionspanel');
-        Templates.render('tiny_snippet/widgetoptions', widget).then(function (html, js) {
+        Templates.render('tiny_snippet/widgetoptions', widget).then(function (html) {
             var optionspanel = that.modalRoot.querySelector('#tiny_snippet_widgets_optionspanel');
             var selectorpanel = that.modalRoot.querySelector('#tiny_snippet_widgets_selectorpanel');
             Log.debug('replacing contents of options panel');
@@ -257,7 +256,7 @@ export default class {
         var context = {};
         var config = getConfig(editor);
         Log.debug(config);
-        
+
         //stuff declared in common
         context.CSS = CSS;
 
